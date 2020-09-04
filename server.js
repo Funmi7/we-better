@@ -6,12 +6,14 @@ require("dotenv/config");
 const server = express();
 
 const authRouter = require('./auth/auth-router');
+const issueRouter = require('./routes/issues-routers');
 
 server.use(cors());
 server.use(bodyParser.json());
 server.use(express.json());
 
 server.use('/auth', authRouter);
+server.use('/issues', issueRouter);
 
 server.get("/", (req, res) => {
   res.status(200).json("Api is working");
