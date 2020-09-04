@@ -2,25 +2,34 @@ const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-require('dotenv/config');
+require("dotenv/config");
 const server = express();
+
+const authRouter = require('./auth/auth-router');
+const issueRouter = require('./routes/issues-routers');
 
 server.use(cors());
 server.use(bodyParser.json());
-server.use(express.json())
+server.use(express.json());
+
+server.use('/auth', authRouter);
+server.use('/issues', issueRouter);
 
 server.get("/", (req, res) => {
   res.status(200).json("Api is working");
 });
 
-
 mongoose.connect(
   process.env.MONGODB_URL,
-  { useNewUrlParser: true },
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+    useCreateIndex: true,
+  },
   () => {
     console.log("Connected to DB!");
   }
 );
-
 
 module.exports = server;
